@@ -1,26 +1,265 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+    font-family: 'PP Neue Montreal Book';
+    font-style: normal;
+    font-weight: normal;
+    src: local('PP Neue Montreal Book'), url('./fonts/ppneuemontreal-book.woff') format('woff');
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+@font-face {
+    font-family: 'PP Neue Montreal Italic';
+    font-style: normal;
+    font-weight: normal;
+    src: local('PP Neue Montreal Italic'), url('./fonts/ppneuemontreal-italic.woff') format('woff');
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
+@font-face {
+    font-family: 'PP Neue Montreal Thin';
+    font-style: normal;
+    font-weight: normal;
+    src: local('PP Neue Montreal Thin'), url('./fonts/ppneuemontreal-thin.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'PP Neue Montreal Medium';
+    font-style: normal;
+    font-weight: normal;
+    src: local('PP Neue Montreal Medium'), url('./fonts/ppneuemontreal-medium.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'PP Neue Montreal SemiBold italic';
+    font-style: normal;
+    font-weight: normal;
+    src: local('PP Neue Montreal SemiBold italic'), url('./fonts/ppneuemontreal-semibolditalic.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'PP Neue Montreal Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('PP Neue Montreal Bold'), url('./fonts/ppneuemontreal-bold.woff') format('woff');
+}
+
+[stroke='url(#gradientFill)'] {
+    stroke: #F2EFE7 !important;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c6c6be;
+    border-radius: 20px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background-color: #e3e3db;
+    color: #1a1a1a;
+}
+
+h1 {
+    font-size: 7.5vw;
+    font-weight: 500;
+    font-family: 'PP Neue Montreal Medium', sans-serif;
+}
+
+p {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'PP Neue Montreal Book', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: monospace;
+    font-weight: 600;
+    font-size: 14px;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+}
+
+span {
+    position: relative;
+    top: -0.075em;
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0 1em;
+}
+
+.home {
+    width: 100vw;
+    height: 100svh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.project-list {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.project-nav {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50vw;
+    display: flex;
+    justify-content: space-between;
+    gap: 2em;
+    padding: 1em;
+    z-index: 2;
+}
+
+.project-nav .link {
+    border-radius: 0.5rem;
+    background-color: #c6c6be;
+}
+
+.project-page-scroll-progress {
+    position: relative;
+    flex: 2;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    border: 1px solid #c6c6be;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px);
+}
+
+.project-page-scroll-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #c6c6be;
+    transform: scaleX(0%);
+    transform-origin: center left;
+    will-change: transform;
+    z-index: -1;
+}
+
+.project-hero,
+.project-footer {
+    position: relative;
+    /* width: 100vw;
+    height: 100vh; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#project-description {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.project-footer-copy {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.project-images {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5em;
+    margin-bottom: 10em;
+}
+
+.project-img {
+    width: 50%;
+    height: 90svh;
+}
+
+.next-project-progress {
+    position: absolute;
+    bottom: 25%;
+    width: 50%;
+    height: 4px;
+    background-color: #c6c6be;
+}
+
+.next-project-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    transform: scaleX(0%);
+    will-change: transform;
+}
+
+@media(max-width: 900px) {
+    .project-nav {
+        width: 100vw;
+    }
+
+    .project-nav .link {
+        display: none;
+    }
+
+    .project-img {
+        width: 90%;
+    }
 }
