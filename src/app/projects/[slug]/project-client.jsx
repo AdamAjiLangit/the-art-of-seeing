@@ -20,18 +20,17 @@ const ProjectClient = ({ project, nextProject, prevProject }) => {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
 
-        gsap.set(projectNavRef.current, {
-            opacity: 0,
-            y: -100
-        });
+        gsap.set(projectNavRef.current, { opacity: 0, y: -100 });
 
-        gsap.to(projectNavRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            delay: 0.25,
-            ease: 'power3.out'
-        });
+        if (!isTransitioning) {
+            gsap.to(projectNavRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 0.25,
+                ease: 'power3.out'
+            });
+        };
 
         gsap.to(projectDescriptionRef.current, {
             opacity: 1,
@@ -46,24 +45,23 @@ const ProjectClient = ({ project, nextProject, prevProject }) => {
             end: 'bottom bottom',
             onUpdate: (self) => {
                 if (progressBarRef.current) {
-                    gsap.set(progressBarRef.current, {
-                        scaleX: self.progress,
-                    })
+                    gsap.set(progressBarRef.current, { scaleX: self.progress });
                 }
             }
         });
 
         const footerScrollTrigger = ScrollTrigger.create({
             trigger: footerRef.current,
-            start: 'top bottom',
-            end: `+=${window.innerHeight * 1.01}px`,
-            // pin: true,
-            // pinSpacing: true,
+            start: 'top top',
+            end: `+=${window.innerHeight * 2}px`,
+            pin: true,
+            pinSpacing: true,
             onEnter: () => {
                 if (projectNavRef.current && !isTransitioning) {
                     gsap.to(projectNavRef.current, {
                         y: -100,
                         duration: 0.5,
+                        opacity: 0,
                         ease: 'power2.inOut'
                     });
                 }
@@ -72,27 +70,30 @@ const ProjectClient = ({ project, nextProject, prevProject }) => {
                 if (projectNavRef.current && !isTransitioning) {
                     gsap.to(projectNavRef.current, {
                         y: 0,
+                        opacity: 1,
                         duration: 0.5,
                         ease: 'power2.inOut'
                     });
                 }
             },
             onUpdate: (self) => {
-
                 if (nextProjectProgressBarRef.current && shouldUpdateProgress) {
                     gsap.set(nextProjectProgressBarRef.current, {
                         scaleX: self.progress
                     });
                 }
 
-                if (self.progress >= 0.98 && !isTransitioning) {
+                if (self.progress >= 0.995 && !isTransitioning) {
                     setShouldUpdateProgress(false);
                     setIsTransitioning(true);
 
                     const tl = gsap.timeline();
 
-                    tl.set(nextProjectProgressBarRef.current, {
-                        scaleX: 1,
+                    tl.to(projectNavRef.current, {
+                        y: -100,
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: 'power2.inOut'
                     });
 
                     tl.to([footerRef.current?.querySelector(".project-footer-copy"), footerRef.current?.querySelector(".next-project-progress")], {
@@ -110,7 +111,7 @@ const ProjectClient = ({ project, nextProject, prevProject }) => {
 
         return () => {
             ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-        }
+        };
     }, [nextProject.slug, isTransitioning, shouldUpdateProgress]);
 
     return (
@@ -123,7 +124,7 @@ const ProjectClient = ({ project, nextProject, prevProject }) => {
                     </div>
 
                     <div className="project-page-scroll-progress">
-                        <p>{project.title}</p>
+                        <p className='p-title'>{project.title}</p>
 
                         <div className="project-page-scroll-progress-bar" ref={progressBarRef}></div>
                     </div>
@@ -137,7 +138,7 @@ const ProjectClient = ({ project, nextProject, prevProject }) => {
                 <div className="project-hero min-h-screen">
                     <h1>{project.title}</h1>
 
-                    <p id='project-description' ref={projectDescriptionRef}>{project.description}</p>
+                    <p className='project-description' ref={projectDescriptionRef}>{project.description}</p>
                 </div>
 
                 <div className="project-images">
@@ -148,7 +149,7 @@ const ProjectClient = ({ project, nextProject, prevProject }) => {
                     ))}
                 </div>
 
-                <div className="project-footer min-h-screen " ref={footerRef}>
+                <div className="project-footer min-h-screen" ref={footerRef}>
                     <h1>{nextProject.title}</h1>
 
                     <div className="project-footer-copy">
